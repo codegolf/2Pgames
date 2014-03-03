@@ -4,9 +4,9 @@ http://codegolf.github.io/2Pgames/1k
 
 2k version: soon.
 
-js.js => commented source (unmaintained)
-js.min.js => golfed source
-js.min.pack.js => packed source
+- js.js => commented source (unmaintained)
+- js.min.js => golfed source
+- js.min.pack.js => packed source
 
 To pack:
 
