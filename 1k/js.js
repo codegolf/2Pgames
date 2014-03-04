@@ -28,7 +28,7 @@ b.innerHTML="<center><p onclick=g(1,3,3,f=1)>XnO<p onclick=g(3,3,3,f=1)>XnO3D<p 
 // x: tables
 // y: rows
 // z: cols
-g=function(x,y,z){
+g=function(x,y,z,A){
 
   // Reset current player, game state and cell number
   c=e=1;
@@ -65,7 +65,7 @@ g=function(x,y,z){
         d[i]=d[i]||0;
       
         // Write cell HTML
-        a+="<th width=20 onclick=m(this,"+i+") id=t"+i+">"+"X\xa0O"[d[i++]+1];
+        a+="<th width=20 onclick=m(this,"+i+","+j+","+k+") id=t"+i+">"+"X\xa0O"[d[i++]+1];
       }
     }
 
@@ -80,7 +80,9 @@ g=function(x,y,z){
 // play
 // x: current cell
 // y: current cell number
-m=function(x,y,z){
+// z: current cell's line
+// A: current cell's column
+m=function(x,y,z,A){
 
   // If the game is not over and the cell is empty
   if(e&&!d[y]){
@@ -88,17 +90,8 @@ m=function(x,y,z){
     /*// Reversi rules
     if(!f){
       
-      // Reset the current cell's playability
-      q=0;
-      
-      // Current line
-      n=~~(y/8);
-      
-      // Current column
-      o=y%8;
-      
       // Try to play on current cell
-      t(n,o,1);
+      t(z,A,1);
       
       // If it was valid
       if(q){
@@ -106,15 +99,12 @@ m=function(x,y,z){
         // Change player
         c=-c;
         C.innerHTML="XnO"[c+1];
-      
-        // Reset player's ability to play
-        q=0;
         
         // Loop on all cells and test if the player can play
-        for(n=0;n<8;n++){
-          for(o=0;o<8;o++){
-            if(!d[n*8+o]){
-              t(n,o);
+        for(z=0;z<8;z++){
+          for(A=0;A<8;A++){
+            if(!d[z*8+A]){
+              t(z,A);
             }
           }
         }
@@ -126,14 +116,12 @@ m=function(x,y,z){
           c=-c;
           C.innerHTML="XnO"[c+1];
         
-          // Reset player's ability to play
-          q=0;
           
           // Loop on all cells and test if the player can play
-          for(n=0;n<8;n++){
-            for(o=0;o<8;o++){
-              if(!d[n*8+o]){
-                t(n,o);
+          for(z=0;z<8;z++){
+            for(A=0;A<8;A++){
+              if(!d[z*8+A]){
+                t(z,A);
               }
             }
           }
@@ -149,7 +137,7 @@ m=function(x,y,z){
             
             // Victory
             if(u){
-              C.innerHTML="XO"[+(u>0)]+" won";
+              C.innerHTML="XO"[+(u>0)]+" won!";
             }
             
             // Draw
@@ -162,12 +150,10 @@ m=function(x,y,z){
       }
       return;
     }
-    */
     
 
     // Tic Tac Toe (normal & 3D) rules
-    //else 
-    if(f==1){
+    else*/ if(f==1){
       
       // Put a mark
       x.innerHTML="XnO"[c+1];
@@ -187,10 +173,10 @@ m=function(x,y,z){
             || d[3*i+2]+d[9+3*i+1]+d[18+3*i]==a         // Lines 3D
             || d[i]+d[9+i+3]+d[18+i+6]==a               // Columns 3D
             || d[i+6]+d[9+i+3]+d[18+i]==a               // Columns 3D
-            || d[0]+d[13]+d[26]==a                      // Diagonals 3D
-            || d[2]+d[13]+d[24]==a                      // Diagonals 3D
-            || d[8]+d[13]+d[18]==a                      // Diagonals 3D
-            || d[6]+d[13]+d[20]==a                      // Diagonals 3D
+            || d[13]+d[0]+d[26]==a                      // Diagonals 3D
+            || d[13]+d[2]+d[24]==a                      // Diagonals 3D
+            || d[13]+d[8]+d[18]==a                      // Diagonals 3D
+            || d[13]+d[6]+d[20]==a                      // Diagonals 3D
             || d[i*3+j]+d[9+i*3+j]+d[18+i*3+j]==a       // Same cell in all tables
           ){
             C.innerHTML="XnO"[c+1]+" won";
@@ -202,7 +188,7 @@ m=function(x,y,z){
     }
     
     // 4 in a row rules
-    else if(f==2&&y>34||d[y+7]){
+    else if(f==2&&(y>34||d[y+7])){
     
       // Put a mark
       x.innerHTML="XnO"[c+1];
@@ -213,19 +199,19 @@ m=function(x,y,z){
       // Test if 4 marks are aligned
       for(i=6;i--;){
         for(j=7;j--;){
-        
+          B=i*7+j;
           if(
             // Horizontally
-            j<4 && d[i*7+j]+d[i*7+j+1]+d[i*7+j+2]+d[i*7+j+3]==a
+            j<4 && d[B]+d[B+1]+d[B+2]+d[B+3]==a
             
             // Vertically
-            || i<3 && d[i*7+j]+d[i*7+j+7]+d[i*7+j+14]+d[i*7+j+21]==a
+            || i<3 && d[B]+d[B+7]+d[B+14]+d[B+21]==a
             
             // Diagonally 1
-            || i<3 && j<4 && d[i*7+j]+d[i*7+j+8]+d[i*7+j+16]+d[i*7+j+24]==a
+            || i<3 && j<4 && d[B]+d[B+8]+d[B+16]+d[B+24]==a
             
             // Diagonally 2
-            || i<3 && j>2 && d[i*7+j]+d[i*7+j+6]+d[i*7+j+12]+d[i*7+j+18]==a
+            || i<3 && j>2 && d[B]+d[B+6]+d[B+12]+d[B+18]==a
           ){
             C.innerHTML="XnO"[c+1]+" won";
             e=0;
@@ -236,7 +222,7 @@ m=function(x,y,z){
     }
     
     // Do nothing if we click on a bad cell at Find 4
-    //else return;
+    else return;
     
     // Change player
     c=-c;
@@ -250,56 +236,62 @@ m=function(x,y,z){
   }
 }
 
+/*
 // Reversi function to test / play a cell
 // x: line
 // y: column
 // z: 0: test / 1: play
-/*t=function(x,y,z){
+t=function(x,y,z){
 
-  // Horizontal offsets
-  s=[-1,0,1,1,1,0,-1,-1];
+  // Reset current player's ability to play
+  q=0;
 
   // For each direction
-  for(v in r=[-1,-1,-1,0,1,1,1,0]){
+  for(v=2;v--+1;){
+    for(u=2;u--+1;){
+      if(u||v){
 
-    // Reset this direction's winning state
-    p=0;
-    
-    // If the neighbour is the opponent
-    if(d[(x+r[v])*8+y+s[v]]==-c){
-      
-      // Loop on the next neighbours in that direction
-      for(
-        i=x+2*r[v],j=y+2*s[v];
-        i>=0&&i<=8&&j>=0&&j<=8;
-        i+=r[v],j+=s[v]
-      ){
-        // If current color is found, stop, good direction
-        if(d[i*8+j]==c){
-          p=q=1;
-          break;
-        }
-        // If an empty cell is found, stop, bad direction
-        if(!d[i*8+j]){
-          break;
-        }
-      }
-      
-      // If this direction wins and play flag == 1
-      if(p&&z){
+        // Reset this direction's winning state
+        p=0;
         
-        // Loop on the opposite neighbours
-        for(
-          k=x,l=y;
-          k!=i||l!=j;
-          k+=r[v],l+=s[v]
-        ){
+        // If the neighbour is the opponent
+        if(d[(x+v)*8+y+u]==-c){
           
-          // Mark them
-          this["t"+(k*8+l)].innerHTML="XnO"[c+1];
-          d[k*8+l]=c;
+          // Loop on the next neighbours in that direction
+          for(
+            i=x+2*v,j=y+2*u;
+            i>=0&&i<9&&j>=0&&j<9;
+            i+=v,j+=u
+          ){
+            // If current color is found, stop, good direction
+            if(d[i*8+j]==c){
+              p=q=1;
+              break;
+            }
+            // If an empty cell is found, stop, bad direction
+            if(!d[i*8+j]){
+              break;
+            }
+          }
+          
+          // If this direction wins and play flag == 1
+          if(p&&z){
+            
+            // Loop on the opposite neighbours
+            for(
+              k=x,l=y;
+              k!=i||l!=j;
+              k+=v,l+=u
+            ){
+              
+              // Mark them
+              this["t"+(k*8+l)].innerHTML="XnO"[c+1];
+              d[k*8+l]=c;
+            }
+          }
         }
       }
     }
   }
-}*/
+}
+*/
