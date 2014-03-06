@@ -152,17 +152,10 @@ m=function(w,x,y,z){
       for(i in d){
         u+=d[i];
       }
-      if(u){
-        D.innerHTML="xo"[u>0|0]+"+";
-      }
-      else{
-        D.innerHTML="=";
-      }
-
-      // If the move was valid
-      if(!q){
-        return
-      }
+      if(!q)
+        return;
+      //else
+      D.innerHTML=u?u>0?"O>X":"X>O":"X=O"
     }
 
     // Tic Tac Toe (normal & 3D) rules
@@ -232,7 +225,7 @@ m=function(w,x,y,z){
 
     // Detect draw
     if(d.indexof(0)==-1){
-      e &= C.innerHTML="=";
+      e &= C.innerHTML=f?"=":"";
     }
   }
 }
