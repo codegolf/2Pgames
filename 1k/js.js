@@ -66,7 +66,7 @@ g=function(w,x,y,z){
         d[i]=d[i]||0;
 
         // Write cell HTML
-        a+="<th width=20 onclick=m(this,"+i+","+(7-j)+","+(7-k)+") id=t"+i+">"+"X.O"[d[i++]+1];
+        a+="<th width=20 onclick=m(this,"+[i,7-j,7-k]+") id=t"+i+">"+"X.O"[d[i++]+1];
       }
     }
 
