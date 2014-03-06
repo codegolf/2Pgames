@@ -210,12 +210,11 @@ m=function(w,x,y,z){
       // Test if 4 marks are aligned
       for(i=6;i--;){
         for(j=7;j--;){
-          B=i*7+j;
           if(
-            j<4&&d[B]+d[B+1]+d[B+2]+d[B+3]==a           // Horizontally
-            ||i<3&&d[B]+d[B+7]+d[B+14]+d[B+21]==a       // Vertically
-            ||i<3&&j<4&&d[B]+d[B+8]+d[B+16]+d[B+24]==a  // Diagonally 1
-            ||i<3&&j>2&&d[B]+d[B+6]+d[B+12]+d[B+18]==a  // Diagonally 2
+            j<4&&d[i*7+j]+d[i*7+j+1]+d[i*7+j+2]+d[i*7+j+3]==a           // Horizontally
+            ||i<3&&d[i*7+j]+d[i*7+j+7]+d[i*7+j+14]+d[i*7+j+21]==a       // Vertically
+            ||i<3&&j<4&&d[i*7+j]+d[i*7+j+8]+d[i*7+j+16]+d[i*7+j+24]==a  // Diagonally 1
+            ||i<3&&j>2&&d[i*7+j]+d[i*7+j+6]+d[i*7+j+12]+d[i*7+j+18]==a  // Diagonally 2
           ){
             return e &= C.innerHTML="XnO"[c+1]+" won";
           }
