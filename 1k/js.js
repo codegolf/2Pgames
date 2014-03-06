@@ -66,7 +66,7 @@ g=function(w,x,y,z){
         d[i]=d[i]||0;
 
         // Write cell HTML
-        a+="<th width=20 onclick=m(this,"+i+","+(7-j)+","+(7-k)+") id=t"+i+">"+"X\xa0O"[d[i++]+1];
+        a+="<th width=20 onclick=m(this,"+i+","+(7-j)+","+(7-k)+") id=t"+i+">"+"X.O"[d[i++]+1];
       }
     }
 
@@ -98,9 +98,9 @@ m=function(w,x,y,z){
       q=0;
 
       // For each direction
-      for(v=2;v--+1;){
-        for(u=2;u--+1;){
-          if(u||v){
+      for(v=2;~v--;){
+        for(u=2;~u--;){
+          if(u|v){
 
             // Reset this direction's playability
             p=0;
@@ -153,7 +153,7 @@ m=function(w,x,y,z){
         u+=d[i];
       }
       if(u){
-        D.innerHTML="XO"[+(u>0)]+"+";
+        D.innerHTML="XO"[u>0|0]+"+";
       }
       else{
         D.innerHTML="=";
@@ -192,9 +192,7 @@ m=function(w,x,y,z){
             || d[13]+d[6]+d[20]==a                      // Diagonals 3D
             || d[i*3+j]+d[9+i*3+j]+d[18+i*3+j]==a       // Same cell in all tables
           ){
-            C.innerHTML="XnO"[c+1]+" won";
-            e=0;
-            return;
+            return e &= C.innerHTML="XnO"[c+1]+" won";
           }
         }
       }
@@ -219,9 +217,7 @@ m=function(w,x,y,z){
             ||i<3&&j<4&&d[B]+d[B+8]+d[B+16]+d[B+24]==a  // Diagonally 1
             ||i<3&&j>2&&d[B]+d[B+6]+d[B+12]+d[B+18]==a  // Diagonally 2
           ){
-            C.innerHTML="XnO"[c+1]+" won";
-            e=0;
-            return;
+            return e &= C.innerHTML="XnO"[c+1]+" won";
           }
         }
       }
@@ -236,8 +232,7 @@ m=function(w,x,y,z){
 
     // Detect draw
     if(d.indexOf(0)==-1){
-      C.innerHTML="=";
-      e=0;
+      e &= C.innerHTML="=";
     }
   }
 }
