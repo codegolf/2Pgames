@@ -23,7 +23,7 @@
 // Unicode: ✌
 
 // Menus
-b.innerHTML="<center><p onclick=g(1,3,3,f=1)>xno<p onclick=g(3,3,3,f=1)>xno3d<p onclick=g(1,6,7,f=2)>find4<p onclick=g(1,8,8,f=0)>reversi<p id=B><p id=C><p id=D>";
+b.innerHTML="<center><p><button onclick=g(1,3,3,f=1)>XnO<button onclick=g(3,3,3,f=1)>XnO3d<button onclick=g(1,6,7,f=2)>find4<button onclick=g(1,8,8,f=0)>reversi</button><p id=B><p id=C><p id=D>";
 
 // Initialization
 // w: tables
@@ -66,7 +66,7 @@ g=function(w,x,y,z){
         d[i]=d[i]||0;
 
         // Write cell HTML
-        a+="<th width=20 onclick=m(this,"+[i,7-j,7-k]+") id=t"+i+">"+"x.o"[d[i++]+1];
+        a+="<th width=20 onclick=m(this,"+[i,7-j,7-k]+") id=t"+i+">"+"X.O"[d[i++]+1];
       }
     }
 
@@ -75,10 +75,10 @@ g=function(w,x,y,z){
   }
 
   // Show current player
-  C.innerHTML="o";
+  C.innerHTML="O";
 
   // Reset current winner
-  D.innerHTML="";
+  D.innerHTML=f?"":"X=O <button onclick=c=-c;C.innerHTML='XnO'[c+1]>pass";
 }
 
 // play
@@ -138,7 +138,7 @@ m=function(w,x,y,z){
                 ){
 
                   // Mark them
-                  this["t"+(k*8+l)].innerHTML="xno"[c+1];
+                  this["t"+(k*8+l)].innerHTML="XnO"[c+1];
                   d[k*8+l]=c;
                 }
               }
@@ -155,14 +155,14 @@ m=function(w,x,y,z){
       if(!q)
         return;
       //else
-      D.innerHTML=u?u>0?"O>X":"X>O":"X=O"
+      D.innerHTML=(u?u>0?"O>X":"X>O":"X=O")+(e?" <button onclick=c=-c;C.innerHTML='XnO'[c+1]>pass":"")
     }
 
     // Tic Tac Toe (normal & 3D) rules
     else if(f==1){
 
       // Put a mark
-      w.innerHTML="xno"[c+1];
+      w.innerHTML="XnO"[c+1];
 
       // Update model, set total
       a=3*(d[x]=c);
@@ -185,7 +185,7 @@ m=function(w,x,y,z){
             || d[13]+d[6]+d[20]==a                      // Diagonals 3D
             || d[i*3+j]+d[9+i*3+j]+d[18+i*3+j]==a       // Same cell in all tables
           ){
-            return e &= C.innerHTML="xno"[c+1]+" won";
+            return e &= C.innerHTML="XnO"[c+1]+" won";
           }
         }
       }
@@ -195,7 +195,7 @@ m=function(w,x,y,z){
     else if(f==2&&(x>34||d[x+7])){
 
       // Put a mark
-      w.innerHTML="xno"[c+1];
+      w.innerHTML="XnO"[c+1];
 
       // Update model, set total
       a=4*(d[x]=c);
@@ -210,7 +210,7 @@ m=function(w,x,y,z){
             ||i<3&&j<4&&d[b]+d[b+8]+d[b+16]+d[b+24]==a  // Diagonally 1
             ||i<3&&j>2&&d[b]+d[b+6]+d[b+12]+d[b+18]==a  // Diagonally 2
           ){
-            return e &= C.innerHTML="xno"[c+1]+" won";
+            return e &= C.innerHTML="XnO"[c+1]+" won";
           }
         }
       }
@@ -221,11 +221,11 @@ m=function(w,x,y,z){
 
     // Change player
     c=-c;
-    C.innerHTML="xno"[c+1];
+    C.innerHTML="XnO"[c+1];
 
     // Detect draw
-    if(d.indexof(0)==-1){
-      e &= C.innerHTML=f?"=":"";
+    if(d.indexOf(0)==-1){
+      e &= C.innerHTML=f?"draw":"";
     }
   }
 }
