@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>...</title>
+		<meta charset="utf-8">
+    <style>
+      html, body { margin: 0; padding: 0; border: 0; }
+      #c { display: block; } /* kill scrollbars from hell */
+    </style>
+	</head>
+	<body>
+		<canvas height="608" style="width: 901px; height: 608px;" width="901" id="c"></canvas>
+		<script>
+			var a = document.getElementsByTagName('canvas')[0];
+			var b = document.body;
+      var d = function(e){ return function(){ e.parentNode.removeChild(e); }; }(a);
+      // unprefix some popular vendor prefixed things (but stick to their original name)
+      var AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+      var requestAnimationFrame =
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(f){ setTimeout(f, 1000/30); };
+      // stretch canvas to screen size (once, wont onresize!)
+      a.style.width = (a.width = innerWidth) + 'px';
+      a.style.height = (a.height = innerHeight) + 'px';
+
+      var c = a.getContext('2d');
+		</script>
+<script>
+    
+    
+    
+    
+    
+    
+// HTML    
+a="<style>*{text-align:center;font-family:arial}</style>";
+for(c=3;c--;){
+  a+="<table border style='margin:1em "+25*(3-c)+"px'>";
+  for(d=3;d--;){
+    a+="<tr>";
+    for(e=3;e--;){
+      a+="<td width=20 onclick=g(this) id=t"+(e+d*3+c*9)+">&nbsp;";
+    }
+  }
+  a+="</table>"
+}
+b.innerHTML=a;
+
+// Model
+f = [];
+
+// Click
+g = function(a){
+  if(!j && a.innerHTML == "&nbsp;"){
+    
+    // Put a mark
+    a.innerHTML = i?"X":"O";
+    
+    // Update model
+    f[a.id.slice(1)] = i?1:-1;
+    //console.log(f);
+    
+    // Won: game over
+    if(h(i?3:-3)){
+      alert("player " + (i+1) + " won");
+      j=1;
+    }
+    
+    // Draw: game over (todo)
+    
+    // Didn't win: change player
+    else{
+      i=1-i;
+    }
+  }
+}
+
+// Test if the last player has won
+h = function(a){
+
+  // Test if 3 X are aligned
+  for(c=3;c--;){
+    for(d=3;d--;){
+        
+      // Same cell in the 3 tables
+      if(f[c*3+d]+f[9+c*3+d]+f[18+c*3+d] == a){
+        return true;
+        //console.log("win (same cell)");
+      }
+      
+      // Horizontally
+      if(f[c*9+d*3]+f[c*9+d*3+1]+f[c*9+d*3+2] == a){
+        return true;
+        //console.log("win (horizontal)");
+      }
+      
+      // Vertically
+      if(f[c*9+d]+f[c*9+d+3]+f[c*9+d+6] == a){
+        return true;
+        //console.log("win (vertical)");
+      }
+    }
+    
+    // Diagonally
+    if(f[c*9]+f[c*9+4]+f[c*9+8] == a){
+      return true;
+      //console.log("win (diagonal 1)");
+    }
+    
+    if(f[c*9+2]+f[c*9+4]+f[c*9+6] == a){
+      return true;
+      //console.log("win (diagonal 2)");
+    }
+    
+    // Horizontally in 3D
+    if(f[c*3]+f[9+c*3+1]+f[18+c*3+2] == a){
+      return true;
+      //console.log("win (horizontal 3D)");
+    }
+    
+    // Vertically in 3D
+    if(f[c]+f[9+c+3]+f[18+c+6] == a){
+      return true;
+      //console.log("win (vertical 3D)");
+    }
+    
+    // Reverse horizontally in 3D
+    if(f[18+c*3]+f[9+c*3+1]+f[c*3+2] == a){
+      return true;
+      //console.log("win (reverse horizontal 3D)");
+    }
+    
+    // Reverse vertically in 3D
+    if(f[18+c]+f[9+c+3]+f[c+6] == a){
+      return true;
+      //console.log("win (reverse vertical 3D)");
+    }
+  }
+  
+  // Diagonal 3D
+  if(f[0]+f[13]+f[26]){
+    return true;
+    //console.log("win (diagonal 3D 1)");
+  }
+  if(f[2]+f[13]+f[24]){
+    return true;
+    //console.log("win (diagonal 3D 2)");
+  }
+  if(f[8]+f[13]+f[18]){
+    return true;
+    //console.log("win (diagonal 3D 3)");
+  }
+  if(f[6]+f[13]+f[20]){
+    return true;
+    //console.log("win (diagonal 3D 4)");
+  }
+  return false;
+}
+
+// current player (0 / 1)
+i = 0;
+
+// Game over
+j = 0;
+
+</script>
+	
+
+</body></html>

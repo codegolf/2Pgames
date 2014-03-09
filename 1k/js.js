@@ -1,231 +1,234 @@
-// Globals
-// a: HTML code (just for init) / sum of the winning moves (-3/3 for Tic Tac Toe, -4/4 for Find 4) (just for play)
-// b: body / i*7+j (reversi)
-// c: current player (-1/1) a.k.a (o/x)
-// d: game data (array filled with -1/0/1)
-// e: game state (0: game over / 1: playing)
-// f: current game (1: TicTacToe / 2: Find 4 / 0: Reversi / 3: Tic Tac Toe 3D)
-// g: init function
+/** Globals **/
+// a: init function
+// b: body
+// c, d, e: board size
+// f: rules (0: reversi / 3: XnO & XnO 3D / 4: find 4), used to determine how many marks must be aligned
+// g: game state  (0: game over / 1: playing)
+// h: HTML
 // i, j, k, l: loop vars
-// m: play function
-// n: current line (reversi)
-// o: current col (reversi)
-// p: same color found (reversi)
-// q: cell is playable (reversi)
-// r: neighbours vertical offsets (reversi)
-// s: neighbours horizontal offsets (reversi)
-// t: subfunction to test / use a cell (reversi)
-// u: sum of all cells (reversi)
-// v: direction (reversi)
-// x,y,z: params
-// B,C,D: HTML containers
-// Unicode:  
-// Unicode: ✌
+// m: model (array filled with -1/0/1)
+// p: current player(1: O / -1: X)
+// q: onclick
+// x: reversi leader / pass (<p>)
+// y: current player / winner (<p>)
+// z: board (<p>)
 
-// Menus
-b.innerHTML="<center><p><button onclick=g(1,3,3,f=1)>XnO<button onclick=g(3,3,3,f=1)>XnO3d<button onclick=g(1,6,7,f=2)>find4<button onclick=g(1,8,8,f=0)>reversi</button><p id=B><p id=C><p id=D>";
+/** Specific vars for init function **/
+// i: lines
+// j: columns
+// k: cell number
 
-// Initialization
-// w: tables
-// x: rows
-// y: cols
-g=function(w,x,y,z){
+/** Specific vars for play function **/
+// c,d,e: params
 
-  // Reset current player, game state and cell number
-  c=e=1;
-  i=0;
+// XnO, XnO3D, Find 4
+// r: sum of the marks that are needed to win
 
-  // Reset game data
-  d=[];
+// Reversi:
+// s: cell is playable
+// t: direction is playable
+// u, v: loop vars
+// w: score
 
-  // Reversi: place 4 discs in the middle
-  if(!f){
-    d[27]=d[36]=-1;
-    d[28]=d[35]=1;
-  }
+/** Unicode space:   **/
 
-  // Reset HTML
-  B.innerHTML="";
+// Show the menu
+b.innerHTML="<center><p><button onclick=c=1;d=e=f=3;a()>XnO<button onclick=c=d=e=f=3;a()>XnO3D<button onclick=c=1;d=6;e=7;f=4;a()>Find4<button onclick=c=1;d=8;e=8;f=w=0;m[27]=m[36]=-1;m[28]=m[35]=1;a()>Reversi";
 
-  // Loop on tables
-  for(;w--;){
-
-    // Write table HTML
-    a="<br><table border>";
-
+// Init current player, game state, game data
+p=g=1;
+m=[];
+  
+// Init function
+a=function(){
+  
+  // Init cell number, HTML
+  l=0;
+  h="<center>";
+  
+  // Loop on tables, write table HTML
+  for(i=c;h+="</table><p><table border>",i--;)
+  
     // Loop on lines
-    for(j=x;j--;){
+    for(j=d;j--;)
 
-      // Write line HTML
-      a+="<tr>";
-
-      // Loop on columns
-      for(k=y;k--;){
-
-        // Reset cell's data
-        d[i]=d[i]||0;
-
+      // Write line HTML, loop on cells
+      for(h+="<tr>",k=e;k--;)
+      
         // Write cell HTML
-        a+="<th width=20 onclick=m(this,"+[i,7-j,7-k]+") id=t"+i+">"+"X.O"[d[i++]+1];
-      }
-    }
+        h+="<th width=20 onclick=q("+[l,7-j,7-k]+") id=t"+l+">"+"X\xa0O"[1+(m[l]=m[l++]||0)];
 
-    // Add HTML
-    B.innerHTML+=a;
-  }
+  // Show HTML and game status
+  b.innerHTML=h+"<p>"+
+  (
 
-  // Show current player
-  C.innerHTML="O";
-
-  // Reset current winner
-  D.innerHTML=f?"":"X=O <button onclick=c=-c;C.innerHTML='XnO'[c+1]>pass";
+    // If the game is not over
+    g?
+    (
+      // If there are empty cells
+      ~m.indexOf(0)?
+      
+      // Show next player
+      "XnO"[p+1]+" next":
+      
+      // Else
+      (
+        // If the game is not reversi
+        f?
+        
+        // Draw
+        "draw":
+        
+        // Else, nothing
+        ""
+      )
+    ):
+    
+    // Else
+    (
+      // If the game is not reversi
+      f?
+      
+      // Winner
+      "XnO"[-p+1]+" won":
+      
+      // Else, nothing
+      ""
+    )
+  )
+  
+  +
+  
+  // Current leader and pass button for reversi
+  (f?"":"<br>"+(w?w>0?"O > X":"X > O":"X = O")+"<br><button onclick=p=-p;a()>pass")
 }
 
-// play
-// w: current cell
-// x: current cell number
-// y: current cell's line
-// z: current cell's column
-m=function(w,x,y,z){
-
+// onclick
+// c: current cell number
+// d: current cell's line
+// e: current cell's column
+q=function(c,d,e){
+  
   // If the game is not over and the cell is empty
-  if(e&&!d[x]){
+  if(g&&!m[c]){
+  
+    // Find 4
+    if(f>3){
+    
+      // If a wrong cell is clicked, apply gravity
+      for(;35>c&&!m[c+7];c+=7);
 
-    // Reversi rules
-    if(!f){
+      // Test if 4 marks are aligned
+      for(i=6;i--;)
+        for(j=7;j--;)
+          if(
+            k=i*7+j,
+            ~[
+              j<4&&m[k]+m[k+1]+m[k+2]+m[k+3],         // Horizontally
+              i<3&&m[k]+m[k+7]+m[k+14]+m[k+21],       // Vertically
+              i<3&&j<4&&m[k]+m[k+8]+m[k+16]+m[k+24],  // Diagonally 1
+              i<3&&j>2&&m[k]+m[k+6]+m[k+12]+m[k+18]   // Diagonally 2
+            ].indexOf(f*(m[c]=p))
+          )
+          g=0;
+    }
+    
+    // XnO
+    else if(f){
+    
+      // Put a mark
+      // Update model, set total
+      // Test victory
+      for(i=3;i--;)
+        for(j=3;j--;)
+          if(
+            k=i*9,
+            l=j*3,
+            ~[
+              m[k+j]+m[k+j+3]+m[k+j+6],   // Columns 2D
+              m[k+l]+m[k+l+1]+m[k+l+2],   // Lines 2D
+              m[k+4]+m[k+0]+m[k+8],       // Diagonals 2D
+              m[k+4]+m[k+2]+m[k+6],       // Diagonals 2D
+              m[l+10]+m[l]+m[l+20],       // Lines 3D
+              m[l+10]+m[l+2]+m[l+18],     // Lines 3D
+              m[i+12]+m[i]+m[i+24],       // Columns 3D
+              m[i+12]+m[i+6]+m[i+18],     // Columns 3D
+              m[13]+m[0]+m[26],           // Diagonals 3D
+              m[13]+m[2]+m[24],           // Diagonals 3D
+              m[13]+m[6]+m[20],           // Diagonals 3D
+              m[13]+m[8]+m[18],           // Diagonals 3D
+              m[l+i]+m[l+i+9]+m[l+i+18]   // Same cell in all tables
+            ].indexOf(f*(m[c]=p))
+          )
+          g=0;
+    }
+    
+    
+    // Reversi
+    else{
 
-      // Reset current player's ability to play
-      q=0;
+      // Reset cell's playability
+      s=0;
 
       // For each direction
-      for(v=2;~v--;){
-        for(u=2;~u--;){
-          if(u|v){
+      for(i=2;~i--;){
+        for(j=2;~j--;){
 
-            // Reset this direction's playability
-            p=0;
+          // Reset that direction's playability
+          // If the neighbour is the opponent
+          if(i|j&&(t=0,m[8*(d+i)+e+j]==-p)){
 
-            // If the neighbour is the opponent
-            if(d[(y+v)*8+z+u]==-c){
-
-              // Loop on the next neighbours in that direction
-              for(
-                i=y+v,j=z+u;
-                ~i&&i<9&&~j&&j<9;
-                i+=v,j+=u
-              ){
-              
-                // If current color is found, stop, good direction
-                if(d[i*8+j]==c){
-                  p=q=1;
-                  break;
-                }
-                
-                // If an empty cell is found, stop, bad direction
-                if(!d[i*8+j]){
-                  break;
-                }
+            // Loop on the next neighbours in that direction
+            for(
+              k=d+i,l=e+j;
+              ~k&&k<9&&~l&&l<9;
+              k+=i,l+=j
+            ){
+            
+              // If current color is found, stop, good direction
+              if(m[k*8+l]==p){
+                s=t=1;
+                break;
               }
+              
+              // If an empty cell is found, stop, bad direction
+              if(!m[k*8+l]){
+                break;
+              }
+            }
 
-              // If this direction is playable
-              if(p){
+            // If this direction is playable
+            if(t){
 
-                // Loop on the opposite neighbours
-                for(
-                  k=y,l=z;
-                  k!=i||l!=j;
-                  k+=v,l+=u
-                ){
+              // Loop on the opposite neighbours
+              for(
+                u=d,v=e;
+                u!=k||v!=l;
+                u+=i,v+=j
+              ){
 
-                  // Mark them
-                  this["t"+(k*8+l)].innerHTML="XnO"[c+1];
-                  d[k*8+l]=c;
-                }
+                // Toggle them
+                m[u*8+v]=p;
               }
             }
           }
         }
       }
-
+      
       // Compute score
-      u=0;
-      for(i in d){
-        u+=d[i];
+      w=0;
+      for(i in m){
+        w+=m[i];
       }
-      if(!q)
-        return;
-      //else
-      D.innerHTML=(u?u>0?"O>X":"X>O":"X=O")+(e?" <button onclick=c=-c;C.innerHTML='XnO'[c+1]>pass":"")
+      
+      // Do nothing if a wrong cell was clicked
+      if(!s)return;
     }
-
-    // Tic Tac Toe (normal & 3D) rules
-    else if(f==1){
-
-      // Put a mark
-      w.innerHTML="XnO"[c+1];
-
-      // Update model, set total
-      a=3*(d[x]=c);
-
-      // Test victory
-      for(i=3;i--;){
-        for(j=3;j--;){
-          if(
-            d[9*i+j]+d[9*i+j+3]+d[9*i+j+6]==a           // columns 2D
-            || d[9*i+3*j]+d[9*i+3*j+1]+d[9*i+3*j+2]==a  // lines 2D
-            || d[9*i+0]+d[9*i+4]+d[9*i+8]==a            // diagonals 2D
-            || d[9*i+2]+d[9*i+4]+d[9*i+6]==a            // diagonals 2D
-            || d[3*i]+d[9+3*i+1]+d[18+3*i+2]==a         // Lines 3D
-            || d[3*i+2]+d[9+3*i+1]+d[18+3*i]==a         // Lines 3D
-            || d[i]+d[9+i+3]+d[18+i+6]==a               // Columns 3D
-            || d[i+6]+d[9+i+3]+d[18+i]==a               // Columns 3D
-            || d[13]+d[0]+d[26]==a                      // Diagonals 3D
-            || d[13]+d[2]+d[24]==a                      // Diagonals 3D
-            || d[13]+d[8]+d[18]==a                      // Diagonals 3D
-            || d[13]+d[6]+d[20]==a                      // Diagonals 3D
-            || d[i*3+j]+d[9+i*3+j]+d[18+i*3+j]==a       // Same cell in all tables
-          ){
-            return e &= C.innerHTML="XnO"[c+1]+" won";
-          }
-        }
-      }
-    }
-
-    // 4 in a row rules
-    else if(f==2&&(x>34||d[x+7])){
-
-      // Put a mark
-      w.innerHTML="XnO"[c+1];
-
-      // Update model, set total
-      a=4*(d[x]=c);
-
-      // Test if 4 marks are aligned
-      for(i=6;i--;){
-        for(j=7;j--;){
-          b=i*7+j;
-          if(
-            j<4&&d[b]+d[b+1]+d[b+2]+d[b+3]==a           // Horizontally
-            ||i<3&&d[b]+d[b+7]+d[b+14]+d[b+21]==a       // Vertically
-            ||i<3&&j<4&&d[b]+d[b+8]+d[b+16]+d[b+24]==a  // Diagonally 1
-            ||i<3&&j>2&&d[b]+d[b+6]+d[b+12]+d[b+18]==a  // Diagonally 2
-          ){
-            return e &= C.innerHTML="XnO"[c+1]+" won";
-          }
-        }
-      }
-    }
-
-    // Do nothing if we click on a bad cell at Find 4
-    else return;
 
     // Change player
-    c=-c;
-    C.innerHTML="XnO"[c+1];
-
-    // Detect draw
-    if(d.indexOf(0)==-1){
-      e &= C.innerHTML=f?"draw":"";
-    }
-  }
+    p=-p;
+    
+    // Redraw board
+    a();
+  }  
 }
