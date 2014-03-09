@@ -30,15 +30,11 @@
 // u, v: loop vars
 // w: score
 
-/** Unicode space:   **/
+/** Unicode space: " " **/
 
 // Show the menu
-b.innerHTML="<center><p><button onclick=c=1;d=e=f=3;a()>XnO<button onclick=c=d=e=f=3;a()>XnO3D<button onclick=c=1;d=6;e=7;f=4;a()>Find4<button onclick=c=1;d=8;e=8;f=w=0;m[27]=m[36]=-1;m[28]=m[35]=1;a()>Reversi";
+b.innerHTML="<center><font face=arial><p><button onclick=p=g=s=1;m=[];c=1;d=e=f=3;a()>XnO<button onclick=p=g=s=1;m=[];c=d=e=f=3;a()>XnO3D<button onclick=p=g=s=1;m=[];c=1;d=6;e=7;f=4;a()>Find4<button onclick=p=g=s=1;m=[];c=1;d=8;e=8;f=w=0;m[27]=m[36]=-1;m[28]=m[35]=1;a()>Reversi</button><p id=z>";
 
-// Init current player, game state, game data
-p=g=1;
-m=[];
-  
 // Init function
 a=function(){
   
@@ -47,7 +43,7 @@ a=function(){
   h="<center>";
   
   // Loop on tables, write table HTML
-  for(i=c;h+="</table><p><table border>",i--;)
+  for(i=c;h+="</table><br><table border>",i--;)
   
     // Loop on lines
     for(j=d;j--;)
@@ -56,10 +52,10 @@ a=function(){
       for(h+="<tr>",k=e;k--;)
       
         // Write cell HTML
-        h+="<th width=20 onclick=q("+[l,7-j,7-k]+") id=t"+l+">"+"X\xa0O"[1+(m[l]=m[l++]||0)];
+        h+="<th width=20 onclick=q("+[l,7-j,7-k]+") id=t"+l+"> "+"X.O"[1+(m[l]=m[l++]||0)];
 
   // Show HTML and game status
-  b.innerHTML=h+"<p>"+
+  z.innerHTML=h+
   (
 
     // If the game is not over
@@ -220,13 +216,10 @@ q=function(c,d,e){
       for(i in m){
         w+=m[i];
       }
-      
-      // Do nothing if a wrong cell was clicked
-      if(!s)return;
     }
 
     // Change player
-    p=-p;
+    if(s)p=-p;
     
     // Redraw board
     a();
