@@ -42,61 +42,21 @@ a=function(){
   l=0;
   h="<center>";
   
+  // Show HTML and game status  
+  
   // Loop on tables, write table HTML
-  for(i=c;h+="</table><br><table border>",i--;)
+  for(i=c;i--;)
   
     // Loop on lines
-    for(j=d;j--;)
+    for(j=d,h+="</table><br><table border>";j--;)
 
       // Write line HTML, loop on cells
       for(h+="<tr>",k=e;k--;)
       
         // Write cell HTML
-        h+="<th width=20 onclick=q("+[l,7-j,7-k]+") id=t"+l+"> "+"X.O"[1+(m[l]=m[l++]||0)];
-
-  // Show HTML and game status
-  z.innerHTML=h+
-  (
-
-    // If the game is not over
-    g?
-    (
-      // If there are empty cells
-      ~m.indexOf(0)?
-      
-      // Show next player
-      "XnO"[p+1]+" next":
-      
-      // Else
-      (
-        // If the game is not reversi
-        f?
-        
-        // Draw
-        "draw":
-        
-        // Else, nothing
-        ""
-      )
-    ):
-    
-    // Else
-    (
-      // If the game is not reversi
-      f?
-      
-      // Winner
-      "XnO"[-p+1]+" won":
-      
-      // Else, nothing
-      ""
-    )
-  )
+        h+="<th width=20 onclick=q("+[l,7-j,7-k]+") id=t"+l+">"+"X.O"[1+(m[l]=m[l++]||0)];
   
-  +
-  
-  // Current leader and pass button for reversi
-  (f?"":"<br>"+(w?w>0?"O > X":"X > O":"X = O")+"<br><button onclick=p=-p;a()>pass")
+  z.innerHTML=(g?(~m.indexOf(0)?"XnO"[p+1]+" next":(f?"draw":"")):(f?"XnO"[-p+1]+" won":""))+(f?"":"<br>"+(w?w>0?"O > X":"X > O":"X = O")+"<br><button onclick=p=-p;a()>pass</button>")+h;
 }
 
 // onclick
