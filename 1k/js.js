@@ -40,7 +40,7 @@ a=function(){
   
   // Init cell number, HTML
   l=0;
-  h="<center>";
+  h="";
   
   // Show HTML and game status  
   
@@ -56,7 +56,7 @@ a=function(){
         // Write cell HTML
         h+="<th width=20 onclick=q("+[l,7-j,7-k]+") id=t"+l+">"+"X.O"[1+(m[l]=m[l++]||0)];
   
-  z.innerHTML=(g?(~m.indexOf(0)?"XnO"[p+1]+" next":(f?"draw":"")):(f?"XnO"[-p+1]+" won":""))+(f?"":"<br>"+(w?w>0?"O > X":"X > O":"X = O")+"<br><button onclick=p=-p;a()>pass</button>")+h;
+  z.innerHTML=(g?(~m.indexOf(0)?"XnO"[p+1]+" next":(f?"draw":"")):(f?"XnO"[-p+1]+" won":""))+(f?"":"<br>"+(w?w>0?"O > X":"X > O":"X = O")+(~m.indexOf(0)?"<br><button onclick=p=-p;a()>pass</button>":""))+h;
 }
 
 // onclick
@@ -135,23 +135,13 @@ q=function(c,d,e){
           if(i|j&&(t=0,m[8*(d+i)+e+j]==-p)){
 
             // Loop on the next neighbours in that direction
+            // If current color is found, stop, good direction
+            // If an empty cell is found, stop, bad direction
             for(
               k=d+i,l=e+j;
-              ~k&&k<9&&~l&&l<9;
+              ~k&&k<9&&~l&&l<9&&(m[8*k+l]!=p||!(s=t=1))&&m[8*k+l];
               k+=i,l+=j
-            ){
-            
-              // If current color is found, stop, good direction
-              if(m[k*8+l]==p){
-                s=t=1;
-                break;
-              }
-              
-              // If an empty cell is found, stop, bad direction
-              if(!m[k*8+l]){
-                break;
-              }
-            }
+            );
 
             // If this direction is playable
             if(t){
